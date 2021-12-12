@@ -1,0 +1,35 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+RWStructuredBuffer<float3> cubeData;
+static const float pi = 3.14159265f;
+
+int numCubesPerAxis;
+float t;
+float c;
+int m, n;
+float lxReciprocal;
+float lyReciprocal;
+
+[numthreads(10,10,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float posZ = 0;
+    uint index = id.y * numCubesPerAxis + id.x;
+
+    // for (int n = 1; n < numCubesPerAxis; n++)
+    // {
+    //     for (int m = 1; m < numCubesPerAxis; m++)
+    //     {
+    //         float w = c * pi * sqrt(pow(n * lxReciprocal, 2) + pow(m * lyReciprocal, 2));
+    //         posZ += sin((n * pi * id.x) * lxReciprocal) * sin((m * pi * id.y) * lxReciprocal) * sin(w * t);
+    //     }
+    // }
+
+    // int m = 3;
+    // int n = 3;
+
+    float w = c * pi * sqrt(pow(n * lxReciprocal, 2) + pow(m * lyReciprocal, 2));
+    posZ = sin((m * pi * id.x) * lxReciprocal) * sin((n * pi * id.y) * lyReciprocal) * sin(w * t);
+    cubeData[index] = float3(id.x, id.y, posZ);
+}
