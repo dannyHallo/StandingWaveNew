@@ -61,12 +61,9 @@ Shader "Custom/TestShader"
             {
                 v2f o;
                 float3 worldPos = mul (unity_ObjectToWorld, v.vertex).xyz;
-
                 float w = c * pi * sqrt(pow(n * lxReciprocal, 2) + pow(m * lyReciprocal, 2));
                 float posZ = sin((m * pi * worldPos.x) * lxReciprocal) * sin((n * pi * worldPos.z) * lyReciprocal) * sin(w * _Time.y);
                 v.vertex.z = posZ * amplitude * 1;
-                // v.vertex.y *= 20;
-
                 worldPos = mul (unity_ObjectToWorld, v.vertex).xyz;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
@@ -80,14 +77,6 @@ Shader "Custom/TestShader"
                 float gradientScale = 1.8;
                 float h = smoothstep(-amplitude * gradientScale, amplitude * gradientScale, i.wpos.y);
                 float3 tex = tex2D(ramp, float2(h,.5));
-                
-                // // Set col to pixel
-                // o.Albedo = tex;
-                // o.Metallic = _Metallic;
-                // o.Smoothness = _Glossiness;
-
-                // sample the texture
-                // fixed4 col = tex2D(_MainTex, i.uv);
                 return tex;
             }
             ENDCG
